@@ -1,2 +1,0 @@
-+	Pirate's Den	2659	2194	7	false
-+	The Haven Thieves' Guild	3693	2509	1	false

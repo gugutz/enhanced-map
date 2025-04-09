@@ -90,8 +90,11 @@
     <Compile Include="ColorsTable.cs" />
     <Compile Include="Core\ChatManager.cs" />
     <Compile Include="Core\CommandManager.cs" />
+    <Compile Include="Core\CsvLabelManager.cs" />
+    <Compile Include="Core\CsvMarkerManager.cs" />
     <Compile Include="Core\FilesManager.cs" />
     <Compile Include="Core\HouseReader.cs" />
+    <Compile Include="Core\MapObjects\CsvLabelObject.cs" />
     <Compile Include="Core\MapObjects\MaskObject.cs" />
     <Compile Include="Core\MapObjects\MobileObject.cs" />
     <Compile Include="Core\MapObjects\SharedLabelObject.cs" />
@@ -346,6 +349,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
+    <None Include="libs\Files\Definitions\labels.csv" />
     <None Include="libs\MapWindow.lua" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

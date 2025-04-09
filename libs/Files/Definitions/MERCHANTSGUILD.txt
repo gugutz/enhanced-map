@@ -1,2 +1,0 @@
-+	The Merchant's Guild	1474	1597	7	false
-+	The Merchant's Guild	3703	2249	7	false

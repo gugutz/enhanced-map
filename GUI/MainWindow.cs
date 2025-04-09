@@ -52,6 +52,8 @@ namespace EnhancedMap.GUI
 
             Logger.Log("Initializing main window...");
 
+            IconStorage.Load();
+
             FormClosing += (sender, e) =>
             {
                 Logger.Log("Main Window closing.");
@@ -479,6 +481,7 @@ namespace EnhancedMap.GUI
                 FilesManager.Guardlines.ForEach(s => RenderObjectsManager.AddGuardline(new GuardLineObject(s)));
                 FilesManager.Houses.ForEach(s => RenderObjectsManager.AddHouse(new HouseObject(s)));
                 FilesManager.BuildSets.ForEach(s => s.Entries.ForEach(a => RenderObjectsManager.AddBuilding(new BuildingObject(a))));
+                CsvLabelManager.Initialize();
 
                 HouseReader.LoadXml();
 
