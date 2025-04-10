@@ -3,6 +3,8 @@ using System;
 using System.Drawing;
 using System.IO;
 using EnhancedMap.Core.MapObjects;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace EnhancedMap.Core.MapObjects
 {
@@ -21,7 +23,21 @@ namespace EnhancedMap.Core.MapObjects
             foreach (string file in Directory.GetFiles(iconDir, "*.png"))
             {
                 string key = Path.GetFileNameWithoutExtension(file).ToLowerInvariant();
-                Icons[key] = new Bitmap(file);
+
+
+                Image original = Image.FromFile(file);
+                Bitmap bmp = new Bitmap(original.Width, original.Height, PixelFormat.Format32bppPArgb);
+
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.PageUnit = GraphicsUnit.Pixel;
+                    g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    g.SmoothingMode = SmoothingMode.AntiAlias;
+                    g.DrawImage(original, 0, 0, original.Width, original.Height);
+                }
+
+                Icons[key] = bmp;
             }
         }
 

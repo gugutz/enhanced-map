@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using EnhancedMap.Core.MapObjects;
 using EnhancedMap.Diagnostic;
 
@@ -67,6 +68,7 @@ namespace EnhancedMap.Core
         {
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Definitions");
 
+            // Lê arquivos .csv e cria labels
             foreach (var file in Directory.GetFiles(path, "*.csv"))
             {
                 try
@@ -83,6 +85,16 @@ namespace EnhancedMap.Core
 
                 }
             }
+
+            // Lê arquivos .map e cria labels
+            foreach (var file in Directory.GetFiles(path, "*.map"))
+            {
+                foreach (var data in ParseMapFile(file).Where(d => d != null))
+                {
+                    CreateLabelFromData(data);
+                }
+            }
+
         }
 
         private static void CreateLabelFromData(CsvLabelData data)
@@ -139,10 +151,11 @@ namespace EnhancedMap.Core
                 {
                     var parts = line.Split(',').Select(p => p.Trim()).ToArray();
 
-                    if (parts.Length < 7) continue;
+                    if (parts.Length < 6) continue;
 
                     try
                     {
+
                         results.Add(new CsvLabelData
                         {
                             X = int.Parse(parts[0]),
@@ -151,7 +164,7 @@ namespace EnhancedMap.Core
                             Name = parts[3].Trim('"'),
                             Icon = parts[4].Trim('"'),
                             Color = parts[5].Trim('"'),
-                            Zoom = int.Parse(parts[6])
+                            Zoom = (parts.Length >= 7) ? int.Parse(parts[6]) : 0 // padrão: zoom 0 = sempre visível
                         });
                     }
 
@@ -172,6 +185,51 @@ namespace EnhancedMap.Core
 
             return results;
         }
+
+        private static List<CsvLabelData> ParseMapFile(string filePath)
+        {
+            var results = new List<CsvLabelData>();
+            var regex = new Regex(@"^([+-])([A-Z]+):\s+(\d+)\s+(\d+)\s+(\d+)\s+(.*)$");
+
+            try
+            {
+                foreach (var line in File.ReadAllLines(filePath))
+                {
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+
+                    var match = regex.Match(line);
+                    if (!match.Success) continue;
+
+                    string enabledFlag = match.Groups[1].Value;
+                    string icon = match.Groups[2].Value.ToLower(); // ex: teleporter
+                    int x = int.Parse(match.Groups[3].Value);
+                    int y = int.Parse(match.Groups[4].Value);
+                    byte facet = byte.Parse(match.Groups[5].Value);
+                    string name = match.Groups[6].Value.Trim();
+
+                    // Ignora labels desativados, se quiser
+                    if (enabledFlag == "-") continue;
+
+                    results.Add(new CsvLabelData
+                    {
+                        X = x,
+                        Y = y,
+                        Facet = facet,
+                        Name = name,
+                        Icon = icon,
+                        Color = "yellow", // ou outro padrão
+                        Zoom = 0
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                File.AppendAllText("debug_label_log_ERRORS.txt", $"[MapParseError] {filePath} => {ex.Message}\n");
+            }
+
+            return results;
+        }
+
     }
 
     public class CsvLabelData
