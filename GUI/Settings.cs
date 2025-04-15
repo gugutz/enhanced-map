@@ -28,6 +28,8 @@ namespace EnhancedMap.GUI
 
         private readonly ServerCommLayout _serverCommLayout = new ServerCommLayout {Tag = 3};
 
+        private readonly CsvLabelsLayout _csvLabelsLayout = new CsvLabelsLayout { Tag = 7 };
+
 
         public Settings()
         {
@@ -47,6 +49,7 @@ namespace EnhancedMap.GUI
             customFlatButtonLabels.Tag = 4;
             customFlatButtonAbout.Tag = 5;
             customFlatButtonDiagnostic.Tag = 6;
+            customFlatButtonCsvLabels.Tag = 7; // csv labels
 
             customFlatButtonNetwork.Click += OnButtonPressend;
             customFlatButtonGenerals.Click += OnButtonPressend;
@@ -55,6 +58,7 @@ namespace EnhancedMap.GUI
             customFlatButtonLabels.Click += OnButtonPressend;
             customFlatButtonAbout.Click += OnButtonPressend;
             customFlatButtonDiagnostic.Click += OnButtonPressend;
+            customFlatButtonCsvLabels.Click += OnButtonPressend; // csv labels
 
             _networkLayout.Visible = true;
             _generalLayout.Visible = _applicationLayout.Visible = _serverCommLayout.Visible = _labelsLayout.Visible = _aboutLayout.Visible = _diagnosticLayout.Visible = false;
@@ -65,6 +69,9 @@ namespace EnhancedMap.GUI
             panelSet.Controls.Add(_labelsLayout);
             panelSet.Controls.Add(_aboutLayout);
             panelSet.Controls.Add(_diagnosticLayout);
+
+            panelSet.Controls.Add(_csvLabelsLayout);
+
 
             customFlatButtonNetwork.ForceHover = true;
 
@@ -88,6 +95,10 @@ namespace EnhancedMap.GUI
                 if (Visible)
                 {
                     _labelsLayout.BuildList();
+                    //CsvLabelsConfig.Save(); // salva a config das labels só uma vez apos carregar a lista de labels
+
+                    _csvLabelsLayout.BuildList(CsvLabelManager.LabelsByFile);
+
                     _applicationLayout.ReloadClients();
                 }
             };

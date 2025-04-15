@@ -13,6 +13,7 @@ namespace EnhancedMap.Core.MapObjects
     {
         public static readonly Dictionary<string, Bitmap> Icons = new();
 
+
         public static void Load()
         {
             Icons.Clear();
@@ -53,6 +54,21 @@ namespace EnhancedMap.Core.MapObjects
     {
         public string IconName { get; set; }
         public int Zoom { get; set; } = 0; // adiciona essa prop no CsvLabelObject se ainda não tiver
+
+
+        public int X => Position.X;
+        public int Y => Position.Y;
+        public byte Facet => Map;
+        public string Name => Text;
+        public bool IsVisible { get; set; } = true;
+        public bool State
+        {
+            get => IsVisible;
+            set => IsVisible = value;
+        }
+
+        public string SourceFile { get; set; }
+
 
         public CsvLabelObject(short x, short y, string text, string iconName) : base(x, y, text)
         {
@@ -109,6 +125,11 @@ namespace EnhancedMap.Core.MapObjects
             }
 
             return true;
+        }
+
+        public Bitmap GetIconBitmap()
+        {
+            return IconStorage.GetIcon(IconName); // ou o método que tu usa pra pegar o ícone
         }
 
     }

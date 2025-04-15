@@ -13,13 +13,14 @@ namespace EnhancedMap.Core
     {
         private static FileSystemWatcher _watcher;
         private static readonly List<LabelObject> _loadedLabels = new();
+        public static Dictionary<string, List<CsvLabelObject>> LabelsByFile { get; private set; } = new();
 
         public static void Initialize()
         {
             CreateDefinitionsDirectory();
             LoadAllLabels();
             SetupFileWatcher();
-            File.AppendAllText("debug_label_log.txt", $"CsvLabelManager init em {DateTime.Now}\n");
+            //File.AppendAllText("debug_label_log.txt", $"CsvLabelManager init em {DateTime.Now}\n");
         }
 
         private static void CreateDefinitionsDirectory()
@@ -66,6 +67,8 @@ namespace EnhancedMap.Core
 
         private static void LoadAllLabels()
         {
+            LabelsByFile.Clear();
+
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Definitions");
 
             // Lê arquivos .csv e cria labels
@@ -73,15 +76,18 @@ namespace EnhancedMap.Core
             {
                 try
                 {
-                    foreach (var data in ParseCsvFile(file))
+                    var parsed = ParseCsvFile(file);
+                    string fileName = Path.GetFileNameWithoutExtension(file);
+
+                    foreach (var data in parsed)
                     {
-                        CreateLabelFromData(data);
+                        CreateLabelFromData(data, fileName);
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Log($"Error loading {file}: {ex}");
-                    File.AppendAllText("debug_label_log_ERRORS.txt", $"Error loading {file}: {ex}");
+                    //File.AppendAllText("debug_label_log_ERRORS.txt", $"Error loading {file}: {ex}");
 
                 }
             }
@@ -91,13 +97,13 @@ namespace EnhancedMap.Core
             {
                 foreach (var data in ParseMapFile(file).Where(d => d != null))
                 {
-                    CreateLabelFromData(data);
+                    CreateLabelFromData(data, file);
                 }
             }
 
         }
 
-        private static void CreateLabelFromData(CsvLabelData data)
+        private static void CreateLabelFromData(CsvLabelData data, string sourceFile)
         {
             try
             {
@@ -119,13 +125,20 @@ namespace EnhancedMap.Core
 
                 };
 
+                // para add as labels na nova pagina de settings
+                if (!LabelsByFile.ContainsKey(sourceFile))
+                    LabelsByFile[sourceFile] = new List<CsvLabelObject>();
+
+                LabelsByFile[sourceFile].Add(label);
+
+
                 _loadedLabels.Add(label);
                 //File.AppendAllText("debug_label_log.txt", $"[Add] Adicionando label \"{data.Name}\" ao RenderObjectsManager\n");
                 //File.AppendAllText("debug_label_log.txt", $"[DEBUG] label.IsVisible = {label.IsVisible}\n");
                 //File.AppendAllText("debug_label_log.txt", $"[DEBUG] label.Map = {label.Map} | Global.Facet = {Global.Facet}\n");
                 //File.AppendAllText("debug_label_log.txt", $"[DEBUG] Position X,Y: {label.Position.X},{label.Position.Y} | Relative: {label.RelativePosition.X},{label.RelativePosition.Y}\n");
-                File.AppendAllText("debug_label_log.txt", $"[DEBUG] Label '{data.Name}' Facet={data.Facet}, Label.Map={label.Map}, Global.Facet={Global.Facet}\n");
-                File.AppendAllText("debug_label_log.txt", $"[DEBUG] Criado label: {data.Name} | Zoom={data.Zoom} | Global.Zoom={Global.Zoom}\n");
+                //File.AppendAllText("debug_label_log.txt", $"[DEBUG] Label '{data.Name}' Facet={data.Facet}, Label.Map={label.Map}, Global.Facet={Global.Facet}\n");
+                //File.AppendAllText("debug_label_log.txt", $"[DEBUG] Criado label: {data.Name} | Zoom={data.Zoom} | Global.Zoom={Global.Zoom}\n");
 
 
                 RenderObjectsManager.AddLabel(label);
@@ -133,7 +146,7 @@ namespace EnhancedMap.Core
             catch (Exception ex)
             {
                 Logger.Log($"Error creating label at {data.X},{data.Y}: {ex}");
-                File.AppendAllText("debug_label_log_ERRORS.txt", $"[ColorError] Cor inválida \"{data.Color}\" para label \"{data.Name}\": {ex.Message}\n");
+                //File.AppendAllText("debug_label_log_ERRORS.txt", $"[ColorError] Cor inválida \"{data.Color}\" para label \"{data.Name}\": {ex.Message}\n");
 
             }
         }
@@ -171,7 +184,7 @@ namespace EnhancedMap.Core
                     catch (Exception ex)
                     {
                         Logger.Log($"Error parsing line: '{line}'\n{ex}");
-                        File.AppendAllText("debug_label_log_ERRORS.txt", $"[ParseError] Erro linha: '{line}'\n{ex.Message}\n");
+                        //File.AppendAllText("debug_label_log_ERRORS.txt", $"[ParseError] Erro linha: '{line}'\n{ex.Message}\n");
 
                     }
                 }
@@ -179,7 +192,7 @@ namespace EnhancedMap.Core
             catch (Exception ex)
             {
                 Logger.Log($"Error reading {filePath}: {ex}");
-                File.AppendAllText("debug_label_log_ERRORS.txt", $"[ParseError 2] Erro linha: '{filePath}'\n{ex.Message}\n");
+                //File.AppendAllText("debug_label_log_ERRORS.txt", $"[ParseError 2] Erro linha: '{filePath}'\n{ex.Message}\n");
 
             }
 
@@ -224,7 +237,7 @@ namespace EnhancedMap.Core
             }
             catch (Exception ex)
             {
-                File.AppendAllText("debug_label_log_ERRORS.txt", $"[MapParseError] {filePath} => {ex.Message}\n");
+                //File.AppendAllText("debug_label_log_ERRORS.txt", $"[MapParseError] {filePath} => {ex.Message}\n");
             }
 
             return results;
