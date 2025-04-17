@@ -222,8 +222,10 @@ namespace EnhancedMap.Core
 
             for (int i = 1; i < _objects.Length; i++)
             {
-                if (i == (int) LAYER_ORDER.LABELS && !showlabel)
-                    continue;
+                //if (i == (int) LAYER_ORDER.LABELS && !showlabel)
+                //    continue;
+                if (i == (int)LAYER_ORDER.LABELS)
+                    showlabel = true;
 
                 for (int j = 0; j < _objects[i].Count; j++)
                 {

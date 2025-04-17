@@ -51,4 +51,5 @@ namespace EnhancedMap.Core.MapObjects
             return false;
         }
     }
+
 }

@@ -30,12 +30,15 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.customFlatButtonAbout = new EnhancedMap.GUI.CustomFlatButton();
+            this.customFlatButtonCsvLabels = new EnhancedMap.GUI.CustomFlatButton(); // CSV labels
+
             this.customFlatButtonLabels = new EnhancedMap.GUI.CustomFlatButton();
             this.customFlatButtonRemote = new EnhancedMap.GUI.CustomFlatButton();
             this.customFlatButtonApplication = new EnhancedMap.GUI.CustomFlatButton();
             this.customFlatButtonDiagnostic = new EnhancedMap.GUI.CustomFlatButton();
             this.customFlatButtonGenerals = new EnhancedMap.GUI.CustomFlatButton();
             this.customFlatButtonNetwork = new EnhancedMap.GUI.CustomFlatButton();
+
             this.panelSet = new System.Windows.Forms.Panel();
             this.customButtonOk = new EnhancedMap.GUI.CustomButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -48,6 +51,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
             this.panel1.Controls.Add(this.customFlatButtonAbout);
+            this.panel1.Controls.Add(this.customFlatButtonCsvLabels); // csv labels
             this.panel1.Controls.Add(this.customFlatButtonLabels);
             this.panel1.Controls.Add(this.customFlatButtonRemote);
             this.panel1.Controls.Add(this.customFlatButtonApplication);
@@ -192,6 +196,26 @@
             this.customFlatButtonNetwork.Text = "Network";
             this.customFlatButtonNetwork.UseVisualStyleBackColor = true;
             // 
+            // customFlatButtonCSVLabels
+            // 
+            this.customFlatButtonCsvLabels.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.customFlatButtonCsvLabels.Dock = System.Windows.Forms.DockStyle.Top;
+            this.customFlatButtonCsvLabels.ForceHover = false;
+            this.customFlatButtonCsvLabels.ForeColor = System.Drawing.Color.White;
+            this.customFlatButtonCsvLabels.Icon = null;
+            this.customFlatButtonCsvLabels.IsHover = true;
+            this.customFlatButtonCsvLabels.IsPressed = false;
+            this.customFlatButtonCsvLabels.IsSelected = false;
+            this.customFlatButtonCsvLabels.Location = new System.Drawing.Point(0, 276); // ajuste a altura se precisar
+            this.customFlatButtonCsvLabels.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
+            this.customFlatButtonCsvLabels.MouseState = EnhancedMap.GUI.MouseState.HOVER;
+            this.customFlatButtonCsvLabels.Name = "customFlatButtonCsvLabels";
+            this.customFlatButtonCsvLabels.Size = new System.Drawing.Size(148, 46);
+            this.customFlatButtonCsvLabels.TabIndex = 7;
+            this.customFlatButtonCsvLabels.Text = "CSV Labels";
+            this.customFlatButtonCsvLabels.UseVisualStyleBackColor = true;
+
+            // 
             // panelSet
             // 
             this.panelSet.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -248,6 +272,7 @@
             this.Name = "Settings";
             this.Text = "Settings";
             this.panel1.ResumeLayout(false);
+
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -267,5 +292,8 @@
         private CustomFlatButton customFlatButtonApplication;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
+
+        private CustomFlatButton customFlatButtonCsvLabels;
+
     }
 }

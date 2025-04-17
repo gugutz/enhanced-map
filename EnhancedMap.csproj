@@ -71,6 +71,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Output\Aga.Controls.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -90,8 +93,11 @@
     <Compile Include="ColorsTable.cs" />
     <Compile Include="Core\ChatManager.cs" />
     <Compile Include="Core\CommandManager.cs" />
+    <Compile Include="Core\CsvLabelManager.cs" />
+    <Compile Include="Core\CustomConfig.cs" />
     <Compile Include="Core\FilesManager.cs" />
     <Compile Include="Core\HouseReader.cs" />
+    <Compile Include="Core\MapObjects\CsvLabelObject.cs" />
     <Compile Include="Core\MapObjects\MaskObject.cs" />
     <Compile Include="Core\MapObjects\MobileObject.cs" />
     <Compile Include="Core\MapObjects\SharedLabelObject.cs" />
@@ -102,6 +108,12 @@
     <Compile Include="Core\SoundsManager.cs" />
     <Compile Include="Core\UOClientManager.cs" />
     <Compile Include="Core\Configuration.cs" />
+    <Compile Include="GUI\SettingsLayouts\CsvLabelsLayout.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\SettingsLayouts\CsvLabelsLayout.Designer.cs">
+      <DependentUpon>CsvLabelsLayout.cs</DependentUpon>
+    </Compile>
     <Compile Include="Timer.cs" />
     <Compile Include="Core\EventSink.cs" />
     <Compile Include="Core\Global.cs" />
@@ -346,6 +358,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
+    <None Include="libs\Files\Definitions\labels.csv" />
     <None Include="libs\MapWindow.lua" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
